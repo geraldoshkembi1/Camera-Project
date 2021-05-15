@@ -23,6 +23,9 @@ public class CameraServiceImpl implements CameraService {
     @Autowired
     CameraRepository cameraRepository;
 
+    @Autowired
+    SequenceGeneratorServiceImpl Gservice;
+
 
     @Override
     public Camera createCamera(CameraRequestModel camera) {
@@ -32,21 +35,24 @@ public class CameraServiceImpl implements CameraService {
         }
         Camera returnCamera = new Camera();
         BeanUtils.copyProperties(camera, returnCamera);
+
+        returnCamera.setId(Gservice.generateSequence(returnCamera.SEQUENCE_NAME));
         cameraRepository.save(returnCamera);
         return returnCamera;
 
     }
 
     @Override
-    public Camera getCamera(String id) {
-        Optional<Camera> returnCamera = cameraRepository.findById(id);
-        System.out.println("Entered into getCamera method of service.");
+    public Camera getCamera(long id) {
+        Camera returnCamera = cameraRepository.findById(id);
 
-        if (returnCamera.isPresent()) {
+        if (returnCamera == null) {
             throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
         } else
-            return returnCamera.get();
+            return  returnCamera;
     }
+
+
 
     @Override
     public List<Camera> getCameras(int page, int limit) {
@@ -89,5 +95,9 @@ public class CameraServiceImpl implements CameraService {
         cameraRepository.delete(returnCamera.get());
     }
 
+    @Override
+    public List<Camera> getCamerasByName(String name){
+        return new ArrayList<>();
+    }
 
 }

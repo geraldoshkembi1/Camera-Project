@@ -9,8 +9,9 @@ import java.util.List;
 public interface CameraService {
 
     Camera createCamera(CameraRequestModel camera);
-    Camera getCamera(String id);
+    Camera getCamera(long id);
     List<Camera> getCameras(int page,int limit);
     Camera updateCamera(String id,CameraRequestModel cameraRequestModel);
     void deleteCamera(String id);
+    List<Camera> getCamerasByName(String name);
 }

@@ -22,8 +22,8 @@ public class CameraController {
 
 
     @GetMapping(path = "/{id}")
-    public Camera getCamera(@PathVariable String id) {
-        Camera returnCamera = cameraService.getCamera(id);
+    public Camera getCamera(@PathVariable(value = "id") long Cid) {
+        Camera returnCamera = cameraService.getCamera(Cid);
 
         return returnCamera;
     }
@@ -65,5 +65,11 @@ public class CameraController {
             List<Camera> returnCameras = cameraService.getCameras(page,limit);
                 return returnCameras;
 
+    }
+
+    @GetMapping
+    public List<Camera> getCamerasByName(@RequestParam String name){
+        List<Camera> returnCameras = cameraService.getCamerasByName(name);
+        return returnCameras;
     }
 }
