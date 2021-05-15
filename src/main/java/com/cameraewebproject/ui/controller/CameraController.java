@@ -40,8 +40,9 @@ public class CameraController {
 
 
 
-    @PutMapping(path = "/{id}")
-    public Camera updateCamera(@PathVariable String id, @RequestBody CameraRequestModel cameraRequestModel) {
+    @PutMapping(path = "/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Camera updateCamera(@PathVariable long id, @RequestBody CameraRequestModel cameraRequestModel) {
         Camera updatedCamera = cameraService.updateCamera(id,cameraRequestModel);
         return updatedCamera;
     }
@@ -49,7 +50,7 @@ public class CameraController {
 
 
     @DeleteMapping(path = "/{id}")
-    public OperationStatusModel deleteCamera(@PathVariable String id) {
+    public OperationStatusModel deleteCamera(@PathVariable long id) {
         OperationStatusModel returnValue = new OperationStatusModel();
         returnValue.setOperationName("DELETE");
         cameraService.deleteCamera(id);
@@ -63,13 +64,9 @@ public class CameraController {
     @GetMapping
     public List<Camera> getCameras(@RequestParam(value="page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit){
             List<Camera> returnCameras = cameraService.getCameras(page,limit);
+        System.out.println(returnCameras);
                 return returnCameras;
 
     }
 
-    @GetMapping
-    public List<Camera> getCamerasByName(@RequestParam String name){
-        List<Camera> returnCameras = cameraService.getCamerasByName(name);
-        return returnCameras;
-    }
 }

@@ -29,9 +29,12 @@ public class CameraServiceImpl implements CameraService {
 
     @Override
     public Camera createCamera(CameraRequestModel camera) {
-        System.out.println("Entered into createCamera method of service.");
-        if (cameraRepository.findByName(camera.getName()) != null) {
-            throw new CameraServiceException("record already exist");
+
+        if (cameraRepository.findByModel(camera.getModel()) != null) {
+            throw new CameraServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+        }
+        if (cameraRepository.findByIp(camera.getIp()) != null) {
+            throw new CameraServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
         }
         Camera returnCamera = new Camera();
         BeanUtils.copyProperties(camera, returnCamera);
@@ -60,9 +63,9 @@ public class CameraServiceImpl implements CameraService {
         if(page > 0) page--;
 
         PageRequest pageableRequest = PageRequest.of(page, limit);
-        Page<Camera> usersPage = cameraRepository.findAll(pageableRequest);
-
-        List<Camera> returnValue =usersPage.getContent();
+        Page<Camera> cameraPage = cameraRepository.findAll(pageableRequest);
+        System.out.println(cameraPage.getTotalElements());
+        List<Camera> returnValue =cameraPage.getContent();
 
         return returnValue;
 
@@ -71,33 +74,28 @@ public class CameraServiceImpl implements CameraService {
     }
 
     @Override
-    public Camera updateCamera(String id,CameraRequestModel cameraRequestModel){
+    public Camera updateCamera(long id,CameraRequestModel cameraRequestModel){
 
-        Optional<Camera> foundCamera = cameraRepository.findById(id);
+        Camera foundCamera = cameraRepository.findById(id);
 
-        if( foundCamera == null) throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        if( foundCamera == null){ throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());}
 
-        foundCamera.get().setIp(cameraRequestModel.getIp());
-        foundCamera.get().setModel(cameraRequestModel.getIp());
-        foundCamera.get().setName(cameraRequestModel.getIp());
-        foundCamera.get().setIp(cameraRequestModel.getIp());
+        foundCamera.setName(cameraRequestModel.getName());
+        foundCamera.setResolutions(cameraRequestModel.getResolutions());
 
-        return foundCamera.get();
+        cameraRepository.save(foundCamera);
+
+        return foundCamera;
     }
 
     @Override
-    public void deleteCamera(String id){
-        Optional<Camera> returnCamera = cameraRepository.findById(id);
-        if (returnCamera.isPresent()) {
+    public void deleteCamera(long id){
+        Camera returnCamera = cameraRepository.findById(id);
+        if (returnCamera == null) {
             throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
         }
-
-        cameraRepository.delete(returnCamera.get());
+        cameraRepository.delete(returnCamera);
     }
 
-    @Override
-    public List<Camera> getCamerasByName(String name){
-        return new ArrayList<>();
-    }
 
 }

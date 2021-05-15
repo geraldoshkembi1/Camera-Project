@@ -4,7 +4,8 @@ import com.cameraewebproject.io.entity.Camera;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface  CameraRepository extends MongoRepository<Camera,String> {
-     Camera findByName(String name);
+     Camera findByModel(String model);
+     Camera findByIp(String ip);
      Camera findById(long id);
 
 }

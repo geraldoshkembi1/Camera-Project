@@ -13,14 +13,13 @@ public class Camera {
 
 
     @Transient
-    public static final String SEQUENCE_NAME = "users_sequence";
+    public static final String SEQUENCE_NAME = "camera_sequence";
 
     @Id
     private long id;
 
 
     private String name;
-
 
     private String model;
 
@@ -61,8 +60,6 @@ public class Camera {
     public void setIp(String ip) {
         this.ip = ip;
     }
-
-
 
     public long getId() {
         return id;
