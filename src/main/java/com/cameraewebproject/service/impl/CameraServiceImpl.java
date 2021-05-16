@@ -30,12 +30,10 @@ public class CameraServiceImpl implements CameraService {
     @Override
     public Camera createCamera(CameraRequestModel camera) {
 
-        if (cameraRepository.findByModel(camera.getModel()) != null) {
-            throw new CameraServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
-        }
-        if (cameraRepository.findByIp(camera.getIp()) != null) {
-            throw new CameraServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
-        }
+//        if (cameraRepository.findByIp(camera.getIp()) != null) {
+//            throw new CameraServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+//        }
+
         Camera returnCamera = new Camera();
         BeanUtils.copyProperties(camera, returnCamera);
 
@@ -45,31 +43,39 @@ public class CameraServiceImpl implements CameraService {
 
     }
 
+//    @Override
+//    public Camera getCamera(long id) {
+//        Camera returnCamera = cameraRepository.findById(id);
+//
+//        if (returnCamera == null) {
+//            throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+//        } else
+//            return  returnCamera;
+//    }
+
+
+
+//    @Override
+//    public List<Camera> getCameras(int page, int limit) {
+//
+//        if(page > 0) page--;
+//
+//        PageRequest pageableRequest = PageRequest.of(page, limit);
+//        Page<Camera> cameraPage = cameraRepository.findAll(pageableRequest);
+//        System.out.println(cameraPage.getTotalElements());
+//        List<Camera> returnValue =cameraPage.getContent();
+//
+//        return returnValue;
+//
+//    }
+
     @Override
-    public Camera getCamera(long id) {
-        Camera returnCamera = cameraRepository.findById(id);
-
-        if (returnCamera == null) {
-            throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        } else
-            return  returnCamera;
-    }
+    public List<Camera> getCameras() {
 
 
-
-    @Override
-    public List<Camera> getCameras(int page, int limit) {
-
-        if(page > 0) page--;
-
-        PageRequest pageableRequest = PageRequest.of(page, limit);
-        Page<Camera> cameraPage = cameraRepository.findAll(pageableRequest);
-        System.out.println(cameraPage.getTotalElements());
-        List<Camera> returnValue =cameraPage.getContent();
+        List<Camera> returnValue =cameraRepository.findAll();;
 
         return returnValue;
-
-
 
     }
 
@@ -77,12 +83,15 @@ public class CameraServiceImpl implements CameraService {
     public Camera updateCamera(long id,CameraRequestModel cameraRequestModel){
 
         Camera foundCamera = cameraRepository.findById(id);
+//        if (cameraRepository.findByIp(foundCamera.getIp()) != null) {
+//            throw new CameraServiceException(ErrorMessages.RECORD_ALREADY_EXISTS.getErrorMessage());
+//        }
 
         if( foundCamera == null){ throw new CameraServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());}
 
         foundCamera.setName(cameraRequestModel.getName());
         foundCamera.setResolutions(cameraRequestModel.getResolutions());
-
+        foundCamera.setModel(cameraRequestModel.getModel());
         cameraRepository.save(foundCamera);
 
         return foundCamera;

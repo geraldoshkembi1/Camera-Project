@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("cameras")  //http:localhost:8080/cameras
 public class CameraController {
@@ -21,12 +21,12 @@ public class CameraController {
     CameraService cameraService;
 
 
-    @GetMapping(path = "/{id}")
-    public Camera getCamera(@PathVariable(value = "id") long Cid) {
-        Camera returnCamera = cameraService.getCamera(Cid);
-
-        return returnCamera;
-    }
+//    @GetMapping(path = "/{id}")
+//    public Camera getCamera(@PathVariable(value = "id") long Cid) {
+//        Camera returnCamera = cameraService.getCamera(Cid);
+//
+//        return returnCamera;
+//    }
 
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -61,12 +61,19 @@ public class CameraController {
 
 
 
-    @GetMapping
-    public List<Camera> getCameras(@RequestParam(value="page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit){
-            List<Camera> returnCameras = cameraService.getCameras(page,limit);
-        System.out.println(returnCameras);
-                return returnCameras;
+//    @GetMapping
+//    public List<Camera> getCameras(@RequestParam(value="page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit){
+//            List<Camera> returnCameras = cameraService.getCameras(page,limit);
+//        System.out.println(returnCameras);
+//                return returnCameras;
+//
+//    }
 
+    @GetMapping
+    public List<Camera> getCameras(){
+        List<Camera> returnCameras = cameraService.getCameras();
+
+        return returnCameras;
     }
 
 }

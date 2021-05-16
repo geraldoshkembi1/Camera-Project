@@ -25,7 +25,6 @@ public class Camera {
 
     private String resolutions;
 
-
     private String ip;
 
 
